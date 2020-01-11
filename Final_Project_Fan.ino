@@ -55,12 +55,12 @@ void loop() {
     Serial.println(temperature, 2);
 
     if (temperature > t){  
-    motor.run(FORWARD);
-  }
+      motor.run(FORWARD);
+    }
 
-  if (temperature <= t){
-    motor.run(RELEASE);
-  }
+    if (temperature <= t){
+      motor.run(RELEASE);
+    }
   
     }
     
@@ -77,7 +77,7 @@ void loop() {
     while(y != 1){
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print("A) Temp Set Point");
+    lcd.print("A) Temp Setpoint");
     lcd.setCursor(0, 1);
     lcd.print("B) Fan Speed");
     delay(2000);
@@ -126,6 +126,14 @@ void loop() {
                       lcd.print(customKey4);
                   
                       t = (10*(customKey3 - '0') + (customKey4 - '0'));
+
+                      if (temperature > t){  
+                         motor.run(FORWARD);
+                      }
+
+                      if (temperature <= t){
+                         motor.run(RELEASE);
+                      }
                   
                       delay(2000);
                       k++;
@@ -145,6 +153,37 @@ void loop() {
         else if(customKey2 == 'B'){
           lcd.clear();
           customKey2 = ' ';
+
+          
+          lcd.setCursor(0, 0);
+          lcd.print("1)Speed 0-100");
+          lcd.setCursor(0, 1);
+                    
+          int s = 0;
+          int t = 0;
+
+          while(s != 1){
+          char speed1 = customKeypad.getKey();
+
+          if (speed1){
+            lcd.print(speed1);
+            while(t != 1){
+              char speed2 = customKeypad.getKey();
+
+               if (speed2){
+                lcd.print(speed2);
+                lcd.print("%");
+                delay(1000);
+                motor.setSpeed( (int) (((0.1 * (speed1 - '0')) + (0.01 * (speed2 - '0'))) * 255));
+                speed1 = ' ';
+                speed2 = ' ';
+                t = 1;
+                s = 1;
+               }
+            }
+          }
+          
+          }
           i++;
         }
 
