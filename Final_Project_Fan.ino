@@ -1,14 +1,14 @@
-`#include <Keypad.h>
+#include <Keypad.h>
 #include <dht.h>
 #include <LiquidCrystal.h>
 #include <AFMotor.h>
-#define dht_apin A7
+#define dht_apin A8
 
 dht DHT;
 
 LiquidCrystal lcd(53, 51, 49, 47, 45, 43);
 
-AF_DCMotor motor(2);
+AF_DCMotor motor(1);
 
 const byte ROWS = 4; 
 const byte COLS = 4;
@@ -25,6 +25,9 @@ byte colPins[COLS] = {30, 33, 34, 37};
 
 Keypad customKeypad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 
+static const unsigned long REFRESH_INTERVAL = 2000; 
+static unsigned long lastRefreshTime = 0;
+
 void setup() {
   lcd.begin(16,2);
   motor.setSpeed(255);
@@ -32,7 +35,7 @@ void setup() {
   Serial.begin(9600);
 }
 
-long t = 20;
+long t = 25;
 int y = 0;
 
 void loop() {
@@ -42,23 +45,29 @@ void loop() {
   DHT.read11(dht_apin);
 
   float temperature = DHT.temperature;
-  
+
+    if (millis() - lastRefreshTime >= REFRESH_INTERVAL){  
+    lastRefreshTime += REFRESH_INTERVAL;
     lcd.setCursor(0,0);
     lcd.print("Temp: ");
     lcd.print(temperature, 2);
     lcd.print(" C ");
-    lcd.setCursor(0,1);
-    lcd.print("PRESS * FOR MENU");  
-  
-  if (temperature > t){
     Serial.println(temperature, 2);
-    Serial.println(t);
+
+    if (temperature > t){  
     motor.run(FORWARD);
   }
 
   if (temperature <= t){
     motor.run(RELEASE);
   }
+  
+    }
+    
+    lcd.setCursor(0,1);
+    lcd.print("PRESS * FOR MENU");  
+  
+  
 
   if (customKey1 == '*'){
 
@@ -143,9 +152,10 @@ void loop() {
           lcd.clear();
           customKey2 = ' ';
           i++;
+          char customKeyIO = customKeypad.getKey();
 
           lcd.setCursor(0, 0);
-          lcd.print("A: OFF  B: ON")
+          lcd.print("A: OFF  B: ON");
           
           lcd.setCursor(0,1);
         }
