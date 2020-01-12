@@ -27,11 +27,14 @@ Keypad customKeypad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS
 
 static const unsigned long REFRESH_INTERVAL1 = 2000;
 static unsigned long lastRefreshTime1 = 0;
-static unsigned long lastRefreshTime2 = 0;
 
 int a = 1;
 int b = 1;
 int c = 0;
+int m = 0;
+long t = 25;
+int v = 1;
+int y = 0;
 
 
 void setup() {
@@ -41,9 +44,6 @@ void setup() {
   Serial.begin(9600);
 }
 
-long t = 28;
-int y = 0;
-
 void loop() {
 
   char menu = customKeypad.getKey();
@@ -52,19 +52,24 @@ void loop() {
 
   float temperature = DHT.temperature;
 
-  if (millis() - lastRefreshTime1 >= REFRESH_INTERVAL1) { //Refreshes Temperature every 2 seconds
-    lastRefreshTime1 += REFRESH_INTERVAL1;
+  if ((millis() - lastRefreshTime1 >= REFRESH_INTERVAL1) || m == 0) { //Refreshes Temperature every 2 seconds
+    
+    if (m == 1) {
+      lastRefreshTime1 += REFRESH_INTERVAL1;
+    }
+
+    m = 1;
     lcd.setCursor(0, 0);
     lcd.print("Temp: ");
-    lcd.print(temperature, 2);
-    lcd.print(" C ");
+    lcd.print(temperature, 1);
+    lcd.print(" Deg C");
     Serial.println(temperature, 2);
 
-    if (temperature > t) {
+    if (temperature > t && v == 1) {
       motor.run(FORWARD);
     }
 
-    if (temperature <= t) {
+    if (temperature <= t && v == 1) {
       motor.run(RELEASE);
     }
 
@@ -73,12 +78,28 @@ void loop() {
   lcd.setCursor(0, 1);
   lcd.print("PRESS * FOR MENU");
 
+  if (menu == '1' && v == 0) {
+    motor.run(FORWARD);
+  }
+
+  if (menu == '0' && v == 0) {
+    motor.run(RELEASE);
+  }
+
   if (menu == '*') {
 
     for (int z  = 0; z < 1; z += 0) {
       menu = ' ';
       char menu_choice;
       unsigned long k = millis();
+
+      if (temperature > t && v == 1) {
+        motor.run(FORWARD);
+      }
+
+      if (temperature <= t && v == 1) {
+        motor.run(RELEASE);
+      }
 
       while (y != 1) {
 
@@ -93,7 +114,7 @@ void loop() {
 
         menu_choice = customKeypad.getKey();
 
-        if (menu_choice == 'A' || menu_choice == 'B' || menu_choice == 'C' || menu_choice == 'D') {
+        if (menu_choice) {
           y = 1;
           a = 1;
         }
@@ -111,7 +132,7 @@ void loop() {
 
             menu_choice = customKeypad.getKey();
 
-            if (menu_choice == 'A' || menu_choice == 'B' || menu_choice == 'C' || menu_choice == 'D') {
+            if (menu_choice) {
               y = 1;
               a = 1;
               c = 1;
@@ -126,7 +147,7 @@ void loop() {
         }
       }
 
-      if (menu_choice == 'A' || menu_choice == 'B' || menu_choice == 'C' || menu_choice == 'D') {
+      if (menu_choice) {
 
         y = 0;
 
@@ -157,11 +178,11 @@ void loop() {
 
                     t = (10 * (temp_digit1 - '0') + (temp_digit2 - '0'));
 
-                    if (temperature > t) {
+                    if (temperature > t && v == 1) {
                       motor.run(FORWARD);
                     }
 
-                    if (temperature <= t) {
+                    if (temperature <= t && v == 1) {
                       motor.run(RELEASE);
                     }
 
@@ -181,12 +202,19 @@ void loop() {
 
           }
           else if (menu_choice == 'B') { //FAN SPEED CONTROL
+
             lcd.clear();
             menu_choice = ' ';
 
 
             lcd.setCursor(0, 0);
-            lcd.print("1)Speed 0-100:");
+            lcd.print("Pick A Number");
+            lcd.setCursor(0, 1);
+            lcd.print("From 20 - 99");
+            delay(2500);
+            lcd.clear();
+            lcd.setCursor(0, 0);
+            lcd.print("To Set Fan Speed");
             lcd.setCursor(0, 1);
 
             int s = 0;
@@ -217,18 +245,55 @@ void loop() {
             i++;
           }
 
-          else if (menu_choice == 'C') {
+          else if (menu_choice == 'C') { //SWITCH TO MANUAL OR AUTOMATIC
             lcd.clear();
             menu_choice = ' ';
-            i++;
-            char manual_or_auto = customKeypad.getKey();
+
+            int q = 0;
 
             lcd.setCursor(0, 0);
-            lcd.print("A: OFF  B: ON");
-
+            lcd.print("A: Manual B:Auto");
             lcd.setCursor(0, 1);
 
+            while (q != 1) {
 
+              char manual_or_auto = customKeypad.getKey();
+
+              if (manual_or_auto == 'A') {
+                lcd.print(manual_or_auto);
+                delay(1000);
+                motor.run(RELEASE);
+                v = 0;
+                q = 1;
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("Manual Control");
+                lcd.setCursor(0, 1);
+                lcd.print("Has Been Enabled");
+                delay(2500);
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("Press 1 Or 0 On");
+                lcd.setCursor(0, 1);
+                lcd.print("The Main Screen");
+                delay(2500);
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("To Turn The Fan");
+                lcd.setCursor(0, 1);
+                lcd.print("On Or Off.");
+                delay(2500);
+              }
+
+              else if (manual_or_auto == 'B') {
+                lcd.print(manual_or_auto);
+                delay(1000);
+                v = 1;
+                q = 1;
+              }
+
+            }
+            i++;
           }
 
           else if (menu_choice == 'D') {
@@ -250,5 +315,4 @@ void loop() {
       }
     }
   }
-
 }
