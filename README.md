@@ -26,15 +26,15 @@ If B is pressed in the menu, the user will be prompted to put in a number betwee
 
 If C is pressed in the menu, the user will be prompted to either press A for Manual Control or B for Automatic Control. Note that if the program is already in manual control or automatic control and the same option is picked, the user will be reverted back to the menu screen with no effect to the program. 
 
-	If Manual is chosen, the fan will turn off (doesn't matter if fan was 	already off) and consecutive screens will appear telling the user 		that manual control has been activated and that if they go back to the 	main screen they can press 1 to toggle the fan on and 0 to toggle the 		fan off. This mode will override the setpoint functionality. 
+	If Manual is chosen, the fan will turn off (doesn't matter if fan was already off) and consecutive screens will appear telling the user that manual control has been activated and that if they go back to the main screen they can press 1 to toggle the fan on and 0 to toggle the fan off. This mode will override the setpoint functionality. 
 
-	If Automatic is chosen, the fan can no longer be controlled from the 		main screen by pressing either 1 or 0. The fan will revert back to 	following the setpoint, turning on only if the temperature ever 	exceeds the setpoint.
+	If Automatic is chosen, the fan can no longer be controlled from the main screen by pressing either 1 or 0. The fan will revert back to following the setpoint, turning on only if the temperature ever exceeds the setpoint.
 
 If D is pressed in the menu, the program will exit the cycling menu and go back to the main screen.
 
 If any other key is pressed during the menu cycle, a screen will appear briefly saying invalid option and then the program will revert back to the menu cycle. 
 
-As of Jan 11, 2020 there is no implementation that can detect if an invalid key is pressed for any of the three menu settings A, B, C. This will hopefully be added later.
+As of Jan 11, 2020 there is no implementation that can detect if any invalid keys are pressed for any of the three menu settings A, B, C. This will hopefully be added later.
 
 
 
