@@ -31,11 +31,14 @@ static unsigned long lastRefreshTime1 = 0;
 int a = 1;
 int b = 1;
 int c = 0;
+int f = 1;
 int g = 1;
 int h = 1;
+int l = 1;
 int m = 0;
 long t = 25;
 int v = 1;
+int w = 1;
 int y = 0;
 
 
@@ -158,7 +161,6 @@ void loop() {
           if (menu_choice == 'A') { //TEMP SETPOINT
 
             lcd.clear();
-            menu_choice == ' ';
             lcd.setCursor(0, 0);
             lcd.print("Enter Temp Point");
             delay(500);
@@ -226,19 +228,15 @@ void loop() {
               lcd.clear();
               i++;
             }
-
           }
           else if (menu_choice == 'B') { //FAN SPEED CONTROL
 
             lcd.clear();
-            menu_choice = ' ';
-
-
             lcd.setCursor(0, 0);
             lcd.print("Pick A Number");
             lcd.setCursor(0, 1);
             lcd.print("From 20 - 99");
-            delay(2500);
+            delay(2000);
             lcd.clear();
             lcd.setCursor(0, 0);
             lcd.print("To Set Fan Speed");
@@ -246,16 +244,50 @@ void loop() {
 
             int s = 0;
             int t = 0;
+            l = 1;
+            f = 1;
 
             while (s != 1) {
               char speed1 = customKeypad.getKey();
 
-              if (speed1) {
+              if (speed1 == '0' || speed1 == '1') {
+                l = 0;
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("Number Too Small");
+                delay(1000);
+                s = 1;
+                speed1 = ' ';
+              }
+
+              if (speed1 == 'A' || speed1 == 'B' || speed1 == 'C' || speed1 == 'D' || speed1 == '*' || speed1 == '#') {
+                l = 0;
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("Invalid Key");
+                delay(1000);
+                s = 1;
+                speed1 = ' ';
+              }
+
+              if (speed1 && l == 1) {
                 lcd.print(speed1);
                 while (t != 1) {
                   char speed2 = customKeypad.getKey();
 
-                  if (speed2) {
+                  if (speed2 == 'A' || speed2 == 'B' || speed2 == 'C' || speed2 == 'D' || speed2 == '*' || speed2 == '#') {
+                    f = 0;
+                    lcd.clear();
+                    lcd.setCursor(0, 0);
+                    lcd.print("Invalid Key");
+                    delay(1000);
+                    s = 1;
+                    t = 1;
+                    speed1 = ' ';
+                    speed2 = ' ';
+                  }
+
+                  if (speed2 && f == 1) {
                     lcd.print(speed2);
                     lcd.print("%");
                     delay(1000);
@@ -269,14 +301,17 @@ void loop() {
               }
 
             }
-            i++;
+            if (f == 1 && l == 1) {
+              lcd.clear();
+              i++;
+            }
           }
 
           else if (menu_choice == 'C') { //SWITCH TO MANUAL OR AUTOMATIC
             lcd.clear();
-            menu_choice = ' ';
 
             int q = 0;
+            w = 1;
 
             lcd.setCursor(0, 0);
             lcd.print("A: Manual B:Auto");
@@ -285,6 +320,16 @@ void loop() {
             while (q != 1) {
 
               char manual_or_auto = customKeypad.getKey();
+
+              if (manual_or_auto != 'A' && manual_or_auto != 'B' && manual_or_auto) {
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("Invalid Key");
+                delay(1000);
+                q = 1;
+                w = 0;
+                manual_or_auto = ' ';
+              }
 
               if (manual_or_auto == 'A') {
                 lcd.print(manual_or_auto);
@@ -320,7 +365,9 @@ void loop() {
               }
 
             }
-            i++;
+            if (w == 1) {
+              i++;
+            }
           }
 
           else if (menu_choice == 'D') {
@@ -334,7 +381,7 @@ void loop() {
             lcd.clear();
             lcd.setCursor(0, 0);
             lcd.print("Invalid Option");
-            delay(1500);
+            delay(1000);
             lcd.clear();
             i++;
           }

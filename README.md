@@ -34,9 +34,13 @@ If D is pressed in the menu, the program will exit the cycling menu and go back 
 
 If any other key is pressed during the menu cycle, a screen will appear briefly saying invalid option and then the program will revert back to the menu cycle. 
 
-Error checking for temp setpoint is implemented.
+Error checking for user input in menu is implemented.
+Error checking for for user input in temp setpoint is implemented.
+Error checking for user input in fan speed is implemented.
+Error checking for user input in manual/automatic control is implemented.
 
-***Need to implement error checking for fan speed and manual control***
+Project is Finalized
+
 
 
 
