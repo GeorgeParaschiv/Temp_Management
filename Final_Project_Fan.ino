@@ -2,7 +2,7 @@
 #include <dht.h>
 #include <LiquidCrystal.h>
 #include <AFMotor.h>
-#define dht_apin A8
+#define dht_pin A8
 
 dht DHT;
 
@@ -48,12 +48,12 @@ void loop() {
 
   char menu = customKeypad.getKey();
 
-  DHT.read11(dht_apin);
+  DHT.read22(dht_pin);
 
   float temperature = DHT.temperature;
 
   if ((millis() - lastRefreshTime1 >= REFRESH_INTERVAL1) || m == 0) { //Refreshes Temperature every 2 seconds
-    
+  
     if (m == 1) {
       lastRefreshTime1 += REFRESH_INTERVAL1;
     }

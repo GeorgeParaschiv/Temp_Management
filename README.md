@@ -3,13 +3,13 @@
 Fan that turns on when temperature exceeds a certain setpoint.
 
 Runs on Arduino Mega 2560 board
-Utilizes: DHT11 Temperature Module, LCD 1602 Module, Membrane Switch Module, 5V DC Motor, L293D Motor Shield Driver
+Utilizes: DHT22 Temperature Module, LCD 1602 Module, Membrane Switch Module, 5V DC Motor, L293D Motor Shield Driver
 
 Temperature setpoint can be changed by user. (25 Degrees Celsius is the default).
 Motor speed can be changed by user. (50% is the default).
 Motor control can be changed to Manual or Automatic. (Automatic is the default).
 
-Arduino temperature gets the temperature while also displaying it on a screen. This process updates every two seconds.
+Arduino temperature gets the temperature while also displaying it on a screen. This process updates every two seconds. Temperature displays up to one decimal place. Accuracy is +-0.5 degrees celsius.
 
 A motor that is connected to the L293D motor shield is programmed to turn on whenever the temperature climbs above the setpoint. The motor will turn off again if the temperature is lower than or equal to the setpoint.
 
@@ -34,7 +34,7 @@ If D is pressed in the menu, the program will exit the cycling menu and go back 
 
 If any other key is pressed during the menu cycle, a screen will appear briefly saying invalid option and then the program will revert back to the menu cycle. 
 
-As of Jan 11, 2020 there is no implementation that can detect if any invalid keys are pressed for any of the three menu settings A, B, C. This will hopefully be added later.
+***Still need to implement error checks for all three menu sections***
 
 
 
