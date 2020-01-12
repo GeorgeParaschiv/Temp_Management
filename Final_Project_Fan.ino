@@ -31,6 +31,8 @@ static unsigned long lastRefreshTime1 = 0;
 int a = 1;
 int b = 1;
 int c = 0;
+int g = 1;
+int h = 1;
 int m = 0;
 long t = 25;
 int v = 1;
@@ -53,7 +55,7 @@ void loop() {
   float temperature = DHT.temperature;
 
   if ((millis() - lastRefreshTime1 >= REFRESH_INTERVAL1) || m == 0) { //Refreshes Temperature every 2 seconds
-  
+
     if (m == 1) {
       lastRefreshTime1 += REFRESH_INTERVAL1;
     }
@@ -160,21 +162,47 @@ void loop() {
             lcd.setCursor(0, 0);
             lcd.print("Enter Temp Point");
             delay(500);
+            g = 1;
 
             for (int j = 0; j < 1; j += 0) {
               char temp_digit1 = customKeypad.getKey();
 
-              if (temp_digit1) {
+              if (temp_digit1 == 'A' || temp_digit1 == 'B' || temp_digit1 == 'C' || temp_digit1 == 'D' || temp_digit1 == '*' || temp_digit1 == '#') {
+                g = 0;
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("Invalid Key");
+                delay(1000);
+                j = 1;
+                temp_digit1 = ' ';
+              }
+
+              if (temp_digit1 && g == 1) {
                 lcd.setCursor(0, 1);
                 lcd.print(temp_digit1);
+
+                k = 0;
+                h = 1;
 
                 for (int k = 0; k < 1; k += 0) {
                   char temp_digit2 = customKeypad.getKey();
 
-                  if (temp_digit2) {
+                  if (temp_digit2 == 'A' || temp_digit2 == 'B' || temp_digit2 == 'C' || temp_digit2 == 'D' || temp_digit2 == '*' || temp_digit2 == '#') {
+                    h = 0;
+                    lcd.clear();
+                    lcd.setCursor(0, 0);
+                    lcd.print("Invalid Key");
+                    delay(1000);
+                    k = 1;
+                    j = 1;
+                    temp_digit2 = ' ';
+                  }
+
+                  if (temp_digit2 && h == 1) {
                     lcd.setCursor(1, 1);
                     lcd.print(temp_digit2);
                     lcd.print(" Degrees C");
+                    delay(1000);
 
                     t = (10 * (temp_digit1 - '0') + (temp_digit2 - '0'));
 
@@ -186,7 +214,6 @@ void loop() {
                       motor.run(RELEASE);
                     }
 
-                    delay(2000);
                     k++;
                     j++;
                   }
@@ -194,11 +221,11 @@ void loop() {
                 }
 
               }
-
             }
-
-            lcd.clear();
-            i++;
+            if (g == 1 && h == 1) {
+              lcd.clear();
+              i++;
+            }
 
           }
           else if (menu_choice == 'B') { //FAN SPEED CONTROL

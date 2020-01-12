@@ -34,7 +34,9 @@ If D is pressed in the menu, the program will exit the cycling menu and go back 
 
 If any other key is pressed during the menu cycle, a screen will appear briefly saying invalid option and then the program will revert back to the menu cycle. 
 
-***Still need to implement error checks for all three menu sections***
+Error checking for temp setpoint is implemented.
+
+***Need to implement error checking for fan speed and manual control***
 
 
 
