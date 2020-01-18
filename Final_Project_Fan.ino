@@ -8,7 +8,7 @@ dht DHT;
 
 LiquidCrystal lcd(53, 51, 49, 47, 45, 43);
 
-AF_DCMotor motor(1);
+AF_DCMotor motor(4);
 
 const byte ROWS = 4;
 const byte COLS = 4;
