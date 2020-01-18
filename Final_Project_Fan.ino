@@ -71,7 +71,7 @@ void loop() {
     Serial.println(temperature, 2);
 
     if (temperature > t && v == 1) {
-      motor.run(FORWARD);
+      motor.run(BACKWARD);
     }
 
     if (temperature <= t && v == 1) {
@@ -84,7 +84,7 @@ void loop() {
   lcd.print("PRESS * FOR MENU");
 
   if (menu == '1' && v == 0) {
-    motor.run(FORWARD);
+    motor.run(BACKWARD);
   }
 
   if (menu == '0' && v == 0) {
@@ -99,7 +99,7 @@ void loop() {
       unsigned long k = millis();
 
       if (temperature > t && v == 1) {
-        motor.run(FORWARD);
+        motor.run(BACKWARD);
       }
 
       if (temperature <= t && v == 1) {
@@ -209,7 +209,7 @@ void loop() {
                     t = (10 * (temp_digit1 - '0') + (temp_digit2 - '0'));
 
                     if (temperature > t && v == 1) {
-                      motor.run(FORWARD);
+                      motor.run(BACKWARD);
                     }
 
                     if (temperature <= t && v == 1) {
